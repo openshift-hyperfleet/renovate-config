@@ -1,0 +1,34 @@
+default_install_hook_types: [pre-commit, commit-msg]
+
+repos:
+  # Secret scanning, matching the service-repository baseline.
+  - repo: https://github.com/leaktk/leaktk
+    rev: e62a495260dc1e396fa586e51bbe1355f6fc7d9d # v0.3.3
+    hooks:
+      - id: leaktk.git.pre-commit
+
+  # Keep commit messages consistent with other HyperFleet repositories.
+  - repo: https://github.com/openshift-hyperfleet/hyperfleet-hooks
+    rev: 7f5119208e5cdee3f0c688881b6a4b803095f203 # v0.2.1
+    hooks:
+      - id: hyperfleet-commitlint
+        stages: [commit-msg]
+
+  # Generic file and JSON hygiene.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c # v6.0.0
+    hooks:
+      - id: check-json
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-added-large-files
+
+  # Renovate validates both schema and configuration semantics.
+  - repo: local
+    hooks:
+      - id: renovate-config-validator
+        name: validate Renovate preset
+        language: system
+        entry: make validate
+        pass_filenames: false
+        files: ^default\.json$

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["local>default.json"],
+  "regexManagers": [
+    {
+      "description": "Keep the local Renovate config validator in sync with MintMaker",
+      "fileMatch": ["^Makefile$"],
+      "matchStrings": [
+        "renovate@(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "npm",
+      "depNameTemplate": "renovate"
+    }
+  ]
+}
