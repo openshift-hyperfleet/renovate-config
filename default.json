@@ -1,0 +1,252 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+
+  "timezone": "UTC",
+  "schedule": ["* 0-3 * * 1"],
+  "updateNotScheduled": false,
+
+  "automerge": false,
+  "platformAutomerge": false,
+
+  "gomod": {
+    "postUpdateOptions": ["gomodUpdateImportPaths", "gomodTidy"],
+    "constraintsFiltering": "strict",
+    "packageRules": [
+      {
+        "description": "Disable Go digest updates",
+        "matchUpdateTypes": ["digest"],
+        "enabled": false
+      },
+      {
+        "description": "Disable indirect Go dependency updates",
+        "matchDepTypes": ["indirect"],
+        "enabled": false
+      },
+      {
+        "description": "Auto-approve non-major Go dependency updates",
+        "matchUpdateTypes": ["patch", "minor", "pin"],
+        "matchCurrentVersion": "!/^v?0\\./",
+        "groupName": "gomod non-major",
+        "addLabels": ["lgtm", "approved", "ok-to-test"]
+      },
+      {
+        "description": "0.x Go updates require human review",
+        "matchUpdateTypes": ["patch", "minor", "pin"],
+        "matchCurrentVersion": "/^v?0\\./",
+        "addLabels": ["manual-review-required", "ok-to-test"]
+      },
+      {
+        "description": "Major Go updates require human review",
+        "matchUpdateTypes": ["major"],
+        "addLabels": ["manual-review-required", "ok-to-test"]
+      }
+    ]
+  },
+
+  "packageRules": [
+    {
+      "description": "Auto-approve non-major Docker image version updates from trusted Red Hat and Konflux sources",
+      "matchManagers": ["!tekton"],
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "registry.access.redhat.com/**",
+        "registry.access.stage.redhat.com/**",
+        "registry.redhat.io/**",
+        "registry.stage.redhat.io/**",
+        "redhat/**",
+        "quay.io/konflux-ci/**",
+        "quay.io/redhat-appstudio-tekton-catalog/**"
+      ],
+      "matchUpdateTypes": ["patch", "minor", "pin"],
+      "matchCurrentVersion": "!/^v?0\\./",
+      "groupName": "trusted docker image updates",
+      "addLabels": ["lgtm", "approved", "ok-to-test"]
+    },
+    {
+      "description": "Trusted Red Hat and Konflux 0.x Docker image updates require human review",
+      "matchManagers": ["!tekton"],
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "registry.access.redhat.com/**",
+        "registry.access.stage.redhat.com/**",
+        "registry.redhat.io/**",
+        "registry.stage.redhat.io/**",
+        "redhat/**",
+        "quay.io/konflux-ci/**",
+        "quay.io/redhat-appstudio-tekton-catalog/**"
+      ],
+      "matchUpdateTypes": ["patch", "minor", "pin"],
+      "matchCurrentVersion": "/^v?0\\./",
+      "groupName": "trusted docker 0.x image updates",
+      "addLabels": ["manual-review-required", "ok-to-test"]
+    },
+    {
+      "description": "Third-party Docker image version updates require human review",
+      "matchManagers": ["!tekton"],
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "!registry.access.redhat.com/**",
+        "!registry.access.stage.redhat.com/**",
+        "!registry.redhat.io/**",
+        "!registry.stage.redhat.io/**",
+        "!redhat/**",
+        "!quay.io/konflux-ci/**",
+        "!quay.io/redhat-appstudio-tekton-catalog/**"
+      ],
+      "matchUpdateTypes": ["patch", "minor", "pin"],
+      "groupName": "third-party docker image updates",
+      "addLabels": ["manual-review-required", "ok-to-test"]
+    },
+    {
+      "description": "Auto-approve digest updates from trusted Red Hat and Konflux image sources",
+      "matchManagers": ["!tekton"],
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "registry.access.redhat.com/**",
+        "registry.access.stage.redhat.com/**",
+        "registry.redhat.io/**",
+        "registry.stage.redhat.io/**",
+        "redhat/**",
+        "quay.io/konflux-ci/**",
+        "quay.io/redhat-appstudio-tekton-catalog/**"
+      ],
+      "matchUpdateTypes": ["digest", "pinDigest"],
+      "groupName": "trusted docker digest updates",
+      "addLabels": ["lgtm", "approved", "ok-to-test"]
+    },
+    {
+      "description": "Third-party Docker digest updates require human review",
+      "matchManagers": ["!tekton"],
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "!registry.access.redhat.com/**",
+        "!registry.access.stage.redhat.com/**",
+        "!registry.redhat.io/**",
+        "!registry.stage.redhat.io/**",
+        "!redhat/**",
+        "!quay.io/konflux-ci/**",
+        "!quay.io/redhat-appstudio-tekton-catalog/**"
+      ],
+      "matchUpdateTypes": ["digest", "pinDigest"],
+      "groupName": "third-party docker digest updates",
+      "addLabels": ["manual-review-required", "ok-to-test"]
+    },
+    {
+      "description": "Major Docker image updates require human review",
+      "matchManagers": ["!tekton"],
+      "matchDatasources": ["docker"],
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["manual-review-required", "ok-to-test"]
+    }
+  ],
+
+  "tekton": {
+    "managerFilePatterns": ["/(^|/)\\.tekton/.*\\.ya?ml$/"],
+    "packageRules": [
+      {
+        "description": "Auto-approve non-major Konflux Tekton docker reference updates",
+        "matchDatasources": ["docker"],
+        "matchPackageNames": [
+          "quay.io/konflux-ci/**",
+          "quay.io/redhat-appstudio-tekton-catalog/**"
+        ],
+        "matchUpdateTypes": ["patch", "minor", "pin"],
+        "matchCurrentVersion": "!/^v?0\\./",
+        "groupName": "Konflux references non-major",
+        "addLabels": ["lgtm", "approved", "ok-to-test"]
+      },
+      {
+        "description": "Konflux Tekton 0.x docker reference updates require human review",
+        "matchDatasources": ["docker"],
+        "matchPackageNames": [
+          "quay.io/konflux-ci/**",
+          "quay.io/redhat-appstudio-tekton-catalog/**"
+        ],
+        "matchUpdateTypes": ["patch", "minor", "pin"],
+        "matchCurrentVersion": "/^v?0\\./",
+        "groupName": "Konflux references 0.x",
+        "addLabels": ["manual-review-required", "ok-to-test"]
+      },
+      {
+        "description": "Third-party Tekton docker reference version updates require human review",
+        "matchDatasources": ["docker"],
+        "matchPackageNames": [
+          "!quay.io/konflux-ci/**",
+          "!quay.io/redhat-appstudio-tekton-catalog/**"
+        ],
+        "matchUpdateTypes": ["patch", "minor", "pin"],
+        "groupName": "Tekton third-party docker version updates",
+        "addLabels": ["manual-review-required", "ok-to-test"]
+      },
+      {
+        "description": "Auto-approve non-major Konflux Tekton annotation and git-tags reference updates",
+        "matchDepTypes": ["tekton-annotation"],
+        "matchPackageNames": [
+          "konflux-ci/**",
+          "redhat-appstudio/**",
+          "https://github.com/konflux-ci/**",
+          "https://github.com/redhat-appstudio/**"
+        ],
+        "matchUpdateTypes": ["patch", "minor", "pin"],
+        "matchCurrentVersion": "!/^v?0\\./",
+        "groupName": "Konflux references non-major",
+        "addLabels": ["lgtm", "approved", "ok-to-test"]
+      },
+      {
+        "description": "Konflux Tekton 0.x annotation and git-tags reference updates require human review",
+        "matchDepTypes": ["tekton-annotation"],
+        "matchPackageNames": [
+          "konflux-ci/**",
+          "redhat-appstudio/**",
+          "https://github.com/konflux-ci/**",
+          "https://github.com/redhat-appstudio/**"
+        ],
+        "matchUpdateTypes": ["patch", "minor", "pin"],
+        "matchCurrentVersion": "/^v?0\\./",
+        "groupName": "Konflux references 0.x",
+        "addLabels": ["manual-review-required", "ok-to-test"]
+      },
+      {
+        "description": "Third-party Tekton annotation and git-tags reference version updates require human review",
+        "matchDepTypes": ["tekton-annotation"],
+        "matchPackageNames": [
+          "!konflux-ci/**",
+          "!redhat-appstudio/**",
+          "!https://github.com/konflux-ci/**",
+          "!https://github.com/redhat-appstudio/**"
+        ],
+        "matchUpdateTypes": ["patch", "minor", "pin"],
+        "groupName": "Tekton third-party annotation version updates",
+        "addLabels": ["manual-review-required", "ok-to-test"]
+      },
+      {
+        "description": "Auto-approve trusted Konflux Tekton digest updates",
+        "matchDatasources": ["docker"],
+        "matchPackageNames": [
+          "quay.io/konflux-ci/**",
+          "quay.io/redhat-appstudio-tekton-catalog/**"
+        ],
+        "matchUpdateTypes": ["digest", "pinDigest"],
+        "groupName": "Konflux references digest",
+        "addLabels": ["lgtm", "approved", "ok-to-test"]
+      },
+      {
+        "description": "Third-party Tekton digest updates require human review",
+        "matchDatasources": ["docker"],
+        "matchPackageNames": [
+          "!quay.io/konflux-ci/**",
+          "!quay.io/redhat-appstudio-tekton-catalog/**"
+        ],
+        "matchUpdateTypes": ["digest", "pinDigest"],
+        "groupName": "Tekton third-party digest updates",
+        "addLabels": ["manual-review-required", "ok-to-test"]
+      },
+      {
+        "description": "Major Tekton reference updates require human review",
+        "matchUpdateTypes": ["major"],
+        "groupName": "Konflux references major",
+        "addLabels": ["manual-review-required", "ok-to-test"]
+      }
+    ]
+  }
+}
