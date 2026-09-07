@@ -23,6 +23,11 @@
         "enabled": false
       },
       {
+        "description": "Bump controller-runtime in the same PR as the kubernetes monorepo: each controller-runtime minor pins one k8s.io/client-go minor and only compiles against that one",
+        "matchPackageNames": ["sigs.k8s.io/controller-runtime"],
+        "groupName": "kubernetes monorepo"
+      },
+      {
         "description": "Auto-approve non-major Go dependency updates",
         "matchUpdateTypes": ["patch", "minor", "pin"],
         "matchCurrentVersion": "!/^v?0\\./",
