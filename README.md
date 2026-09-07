@@ -32,6 +32,8 @@ Consumer configuration is merged after the shared preset. Add only genuinely rep
 | Non-major Konflux/Tekton docker or annotation reference (non-0.x) | `lgtm`, `approved`, `ok-to-test` | Tide after CI |
 | Konflux/Tekton 0.x reference or third-party version, digest, or major | `manual-review-required`, `ok-to-test` | Tide after human `/lgtm` and CI |
 
+`sigs.k8s.io/controller-runtime` is grouped into the `kubernetes monorepo` PR because each controller-runtime minor pins one `k8s.io/client-go` minor and only compiles against that one. Bumping `k8s.io/*` alone leaves the build broken inside controller-runtime until the matching release lands in the same branch.
+
 The shared preset creates and updates branches only on Monday between 00:00 and 03:59 UTC (`updateNotScheduled: false`). It disables Go indirect-dependency updates, applies strict Go-version compatibility filtering, and scans `.tekton/**/*.yaml` for Tekton references. Major Go upgrades run `gomodUpdateImportPaths` before `gomodTidy`, so module-path and checksum changes are generated together.
 
 Renovate automerge is disabled for every rule. The labels express update eligibility for Tide: trusted non-major updates can merge after CI, while `manual-review-required` updates still need a human `/lgtm` even when CI is green.
@@ -98,6 +100,7 @@ digest                  → disabled
 Go-incompatible         → filtered out
 import migration  → automatic
 go mod tidy       → automatic
+controller-runtime → grouped with kubernetes monorepo
 ```
 
 ## Local validation
