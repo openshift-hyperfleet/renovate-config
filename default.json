@@ -60,8 +60,7 @@
         "registry.stage.redhat.io/**",
         "redhat/**",
         "quay.io/konflux-ci/**",
-        "quay.io/redhat-appstudio-tekton-catalog/**",
-        "quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**"
+        "quay.io/redhat-appstudio-tekton-catalog/**"
       ],
       "matchUpdateTypes": ["patch", "minor", "pin"],
       "matchCurrentVersion": "!/^v?0\\./",
@@ -97,8 +96,7 @@
         "!registry.stage.redhat.io/**",
         "!redhat/**",
         "!quay.io/konflux-ci/**",
-        "!quay.io/redhat-appstudio-tekton-catalog/**",
-        "!quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**"
+        "!quay.io/redhat-appstudio-tekton-catalog/**"
       ],
       "matchUpdateTypes": ["patch", "minor", "pin"],
       "groupName": "third-party docker image updates",
@@ -115,8 +113,7 @@
         "registry.stage.redhat.io/**",
         "redhat/**",
         "quay.io/konflux-ci/**",
-        "quay.io/redhat-appstudio-tekton-catalog/**",
-        "quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**"
+        "quay.io/redhat-appstudio-tekton-catalog/**"
       ],
       "matchUpdateTypes": ["digest", "pinDigest"],
       "groupName": "trusted docker digest updates",
@@ -133,8 +130,7 @@
         "!registry.stage.redhat.io/**",
         "!redhat/**",
         "!quay.io/konflux-ci/**",
-        "!quay.io/redhat-appstudio-tekton-catalog/**",
-        "!quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**"
+        "!quay.io/redhat-appstudio-tekton-catalog/**"
       ],
       "matchUpdateTypes": ["digest", "pinDigest"],
       "groupName": "third-party docker digest updates",
