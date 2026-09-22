@@ -61,7 +61,8 @@
         "redhat/**",
         "quay.io/konflux-ci/**",
         "quay.io/redhat-appstudio-tekton-catalog/**",
-        "quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**"
+        "quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**",
+        "quay.io/redhat-user-workloads/hyperfleet-tenant/hyperfleet/**"
       ],
       "matchUpdateTypes": ["patch", "minor", "pin"],
       "matchCurrentVersion": "!/^v?0\\./",
@@ -98,7 +99,8 @@
         "!redhat/**",
         "!quay.io/konflux-ci/**",
         "!quay.io/redhat-appstudio-tekton-catalog/**",
-        "!quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**"
+        "!quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**",
+        "!quay.io/redhat-user-workloads/hyperfleet-tenant/hyperfleet/**"
       ],
       "matchUpdateTypes": ["patch", "minor", "pin"],
       "groupName": "third-party docker image updates",
@@ -116,7 +118,8 @@
         "redhat/**",
         "quay.io/konflux-ci/**",
         "quay.io/redhat-appstudio-tekton-catalog/**",
-        "quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**"
+        "quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**",
+        "quay.io/redhat-user-workloads/hyperfleet-tenant/hyperfleet/**"
       ],
       "matchUpdateTypes": ["digest", "pinDigest"],
       "groupName": "trusted docker digest updates",
@@ -134,7 +137,8 @@
         "!redhat/**",
         "!quay.io/konflux-ci/**",
         "!quay.io/redhat-appstudio-tekton-catalog/**",
-        "!quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**"
+        "!quay.io/redhat-services-prod/hyperfleet-tenant/hyperfleet/**",
+        "!quay.io/redhat-user-workloads/hyperfleet-tenant/hyperfleet/**"
       ],
       "matchUpdateTypes": ["digest", "pinDigest"],
       "groupName": "third-party docker digest updates",
