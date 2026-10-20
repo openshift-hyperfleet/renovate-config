@@ -50,6 +50,11 @@
 
   "packageRules": [
     {
+      "description": "Disable the pre-commit manager: Renovate rewrites SHA-pinned .pre-commit-config.yaml revs to mutable tags, violating the architecture supply-chain standard (revs must be full commit SHAs; evidence: hyperfleet-api commit 312f4fa). Hook rev updates are manual, via git ls-remote.",
+      "matchManagers": ["pre-commit"],
+      "enabled": false
+    },
+    {
       "description": "Auto-approve non-major Docker image version updates from trusted Red Hat and Konflux sources",
       "matchManagers": ["!tekton"],
       "matchDatasources": ["docker"],
