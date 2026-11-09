@@ -31,6 +31,7 @@ Consumer configuration is merged after the shared preset. Add only genuinely rep
 | Third-party Docker digest or major image | `manual-review-required`, `ok-to-test` | Tide after human `/lgtm` and CI |
 | Non-major Konflux/Tekton docker or annotation reference (non-0.x) | `lgtm`, `approved`, `ok-to-test` | Tide after CI |
 | Konflux/Tekton 0.x reference or third-party version, digest, or major | `manual-review-required`, `ok-to-test` | Tide after human `/lgtm` and CI |
+| Pre-commit hook | `manual-review-required`, `ok-to-test` | Tide after human `/lgtm` and CI |
 
 `sigs.k8s.io/controller-runtime` is grouped into the `kubernetes monorepo` PR because each controller-runtime minor pins one `k8s.io/client-go` minor and only compiles against that one. Bumping `k8s.io/*` alone leaves the build broken inside controller-runtime until the matching release lands in the same branch.
 
@@ -61,6 +62,7 @@ flowchart TD
 
     M -->|"gomod"| A
     M -->|"Docker / Tekton"| DS{"Trusted image source?"}
+    M -->|"pre-commit"| H
 
     DS -->|"Yes"| A
     DS -->|"No"| H
@@ -87,7 +89,7 @@ flowchart TD
 
 `APPROVE` = `lgtm`, `approved`, `ok-to-test`. `HUMAN` = `manual-review-required`, `ok-to-test`.
 
-Non-major flow is sequential: check `0.x` first, then manager type. Go modules skip the trusted-source check. Docker and Tekton non-0.x updates still require a trusted Red Hat/Konflux source to auto-approve.
+Non-major flow is sequential: check `0.x` first, then manager type. Go modules skip the trusted-source check. Docker and Tekton non-0.x updates still require a trusted Red Hat/Konflux source to auto-approve. Pre-commit hook updates always need human review, because hook pins are repository-wide gates and a silent bump changes the checks every contributor runs.
 
 ## Go module behavior
 
