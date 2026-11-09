@@ -146,6 +146,11 @@
       "matchDatasources": ["docker"],
       "matchUpdateTypes": ["major"],
       "addLabels": ["manual-review-required", "ok-to-test"]
+    },
+    {
+      "description": "Pre-commit hook updates require human review",
+      "matchManagers": ["pre-commit"],
+      "addLabels": ["manual-review-required", "ok-to-test"]
     }
   ],
 
