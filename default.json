@@ -48,6 +48,10 @@
     ]
   },
 
+  "pre-commit": {
+    "enabled": true
+  },
+
   "packageRules": [
     {
       "description": "Auto-approve non-major Docker image version updates from trusted Red Hat and Konflux sources",
