@@ -37,6 +37,8 @@ Consumer configuration is merged after the shared preset. Add only genuinely rep
 
 The shared preset creates and updates branches only on Monday between 00:00 and 03:59 UTC (`updateNotScheduled: false`). It disables Go indirect-dependency updates, applies strict Go-version compatibility filtering, and scans `.tekton/**/*.yaml` for Tekton references. Major Go upgrades run `gomodUpdateImportPaths` before `gomodTidy`, so module-path and checksum changes are generated together.
 
+Docker Hub `golang` images are held below Go 1.27 (`allowedVersions: "<1.27"`). Red Hat has not published Go 1.27 builder images yet (`ubi9/go-toolset` and the Prow `ocp/builder` images stop at 1.26), so a `golang` 1.27 bump would ship binaries built with a Go version that Prow does not test and Konflux components do not use. Renovate still proposes 1.26 patch releases. Remove the rule once the Red Hat 1.27 images exist (HYPERFLEET-1916).
+
 Renovate automerge is disabled for every rule. The labels express update eligibility for Tide: trusted non-major updates can merge after CI, while `manual-review-required` updates still need a human `/lgtm` even when CI is green.
 
 `packageRules` and `addLabels` merge with inherited MintMaker org config. Renovate does not remove labels added by a broader inherited rule, so any org-level auto-approve rule must itself exclude third-party sources and `0.x` updates. Validate the effective config in MintMaker before rollout.

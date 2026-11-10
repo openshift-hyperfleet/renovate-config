@@ -148,6 +148,12 @@
       "addLabels": ["manual-review-required", "ok-to-test"]
     },
     {
+      "description": "Hold Docker Hub golang images on Go 1.26: Red Hat has not published Go 1.27 builder images (ubi9/go-toolset, ocp/builder) yet, so Konflux and Prow still build and test on 1.26. Remove once they exist (HYPERFLEET-1916)",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["golang", "docker.io/golang", "docker.io/library/golang"],
+      "allowedVersions": "<1.27"
+    },
+    {
       "description": "Pre-commit hook updates require human review",
       "matchManagers": ["pre-commit"],
       "addLabels": ["manual-review-required", "ok-to-test"]
