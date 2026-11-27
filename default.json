@@ -23,12 +23,25 @@
         "enabled": false
       },
       {
+        "description": "Keep vulnerability fixes for indirect Go dependencies",
+        "matchJsonata": ["isVulnerabilityAlert = true"],
+        "matchDepTypes": ["indirect"],
+        "enabled": true,
+        "addLabels": ["manual-review-required", "ok-to-test"]
+      },
+      {
+        "description": "Go vulnerability fixes require human review",
+        "matchJsonata": ["isVulnerabilityAlert = true"],
+        "addLabels": ["manual-review-required", "ok-to-test"]
+      },
+      {
         "description": "Bump controller-runtime in the same PR as the kubernetes monorepo: each controller-runtime minor pins one k8s.io/client-go minor and only compiles against that one",
         "matchPackageNames": ["sigs.k8s.io/controller-runtime"],
         "groupName": "kubernetes monorepo"
       },
       {
         "description": "Auto-approve non-major Go dependency updates",
+        "matchJsonata": ["$not(isVulnerabilityAlert = true)"],
         "matchUpdateTypes": ["patch", "minor", "pin"],
         "matchCurrentVersion": "!/^v?0\\./",
         "groupName": "gomod non-major",
