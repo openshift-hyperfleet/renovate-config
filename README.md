@@ -24,7 +24,7 @@ Consumer configuration is merged after the shared preset. Add only genuinely rep
 | Go patch, minor, and pin (non-0.x) | `lgtm`, `approved`, `ok-to-test` | Tide after CI |
 | Go 0.x patch, minor, or pin | `manual-review-required`, `ok-to-test` | Tide after human `/lgtm` and CI |
 | Go major | `manual-review-required`, `ok-to-test` | Tide after human `/lgtm` and CI |
-| Go vulnerability fix (direct or indirect) | `manual-review-required`, `ok-to-test` | Tide after human `/lgtm` and CI |
+| Go vulnerability fix (direct or indirect) | Same as the matching Go update type | Same as the equivalent Go update |
 | Trusted Red Hat or Konflux Docker patch, minor, or pin (non-0.x) | `lgtm`, `approved`, `ok-to-test` | Tide after CI |
 | Trusted Red Hat or Konflux Docker 0.x patch, minor, or pin | `manual-review-required`, `ok-to-test` | Tide after human `/lgtm` and CI |
 | Third-party Docker patch, minor, or pin | `manual-review-required`, `ok-to-test` | Tide after human `/lgtm` and CI |
@@ -36,7 +36,7 @@ Consumer configuration is merged after the shared preset. Add only genuinely rep
 
 `sigs.k8s.io/controller-runtime` is grouped into the `kubernetes monorepo` PR because each controller-runtime minor pins one `k8s.io/client-go` minor and only compiles against that one. Bumping `k8s.io/*` alone leaves the build broken inside controller-runtime until the matching release lands in the same branch.
 
-The shared preset creates and updates branches only on Monday between 00:00 and 03:59 UTC (`updateNotScheduled: false`). It disables Go indirect-dependency updates, except for vulnerability fixes, which stay enabled and go to human review. It also applies strict Go-version compatibility filtering and scans `.tekton/**/*.yaml` for Tekton references. Major Go upgrades run `gomodUpdateImportPaths` before `gomodTidy`, so module-path and checksum changes are generated together.
+The shared preset creates and updates branches only on Monday between 00:00 and 03:59 UTC (`updateNotScheduled: false`). It disables Go indirect-dependency updates, except for vulnerability fixes, which stay enabled and follow the same update-type policy as any other Go update. It also applies strict Go-version compatibility filtering and scans `.tekton/**/*.yaml` for Tekton references. Major Go upgrades run `gomodUpdateImportPaths` before `gomodTidy`, so module-path and checksum changes are generated together.
 
 Docker Hub `golang` images are held below Go 1.27 (`allowedVersions: "<1.27"`). Red Hat has not published Go 1.27 builder images yet (`ubi9/go-toolset` and the Prow `ocp/builder` images stop at 1.26), so a `golang` 1.27 bump would ship binaries built with a Go version that Prow does not test and Konflux components do not use. Renovate still proposes 1.26 patch releases. Remove the rule once the Red Hat 1.27 images exist (HYPERFLEET-1916).
 
@@ -51,10 +51,7 @@ flowchart TD
     U["Dependency update"] --> D{"Disabled?"}
 
     D -->|"Go digest, or Go indirect without a vulnerability fix"| N["No PR"]
-    D -->|"No"| V{"Go vulnerability fix?"}
-
-    V -->|"Yes"| H
-    V -->|"No"| T{"Update type"}
+    D -->|"No"| T{"Update type"}
 
     T -->|"digest / pinDigest"| S{"Trusted image source?"}
     S -->|"Yes"| A["Auto-approved"]
@@ -97,7 +94,7 @@ flowchart TD
 
 Non-major flow is sequential: check `0.x` first, then manager type. Go modules skip the trusted-source check. Docker and Tekton non-0.x updates still require a trusted Red Hat/Konflux source to auto-approve. Pre-commit hook updates always need human review, because hook pins are repository-wide gates and a silent bump changes the checks every contributor runs.
 
-A Go vulnerability fix is classified before the update type, so it always needs human review, whatever the version bump. One rule re-enables the CVE fixes for indirect modules that the disable rule would otherwise drop. Another labels every Go vulnerability fix with `manual-review-required` and `ok-to-test`, and the non-major auto-approve rule matches only updates that are not vulnerability alerts, so a CVE PR never receives `lgtm` or `approved` on creation. Confirming that an advisory covers what the module does is human work.
+A vulnerability fix on an indirect Go module is the one exception to the disable rule: the rule that re-enables it sits after `Disable indirect Go dependency updates`, and Renovate's last matching rule wins. The fix then goes through this same flow, so a non-0.x patch or minor is auto-approved and a 0.x or major bump still needs human review. Merging the fixed version is never worse than staying on the vulnerable one, so the advisory does not need its own review tier.
 
 ## Go module behavior
 
@@ -105,7 +102,7 @@ A Go vulnerability fix is classified before the update type, so it always needs 
 patch/minor/pin (non-0.x) → approve
 0.x patch/minor/pin     → human
 major                   → human
-vulnerability fix       → human
+vulnerability fix       → follows update type
 indirect                → disabled
 digest                  → disabled
 Go-incompatible         → filtered out
