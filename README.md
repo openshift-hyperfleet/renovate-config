@@ -103,7 +103,7 @@ patch/minor/pin (non-0.x) → approve
 0.x patch/minor/pin     → human
 major                   → human
 vulnerability fix       → follows update type
-indirect                → disabled
+indirect                → disabled (vulnerability fixes excepted)
 digest                  → disabled
 Go-incompatible         → filtered out
 import migration  → automatic
